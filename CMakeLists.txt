@@ -35,6 +35,12 @@ if(UNIX)
   # GTK2
   if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(GTK2_ADDITIONAL_SUFFIXES x86_64-linux-gnu/glib-2.0)
+  elseif(${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
+    include_directories(
+      /usr/local/lib/amd64/glib-2.0/include
+      /usr/local/lib/amd64/gtk-2.0/include
+      /usr/local/lib/amd64/libffi-3.0.9/include
+    )
   endif()
   find_package(GTK2 2.6 REQUIRED gtk)
   if(GTK2_FOUND)
