@@ -1,0 +1,15 @@
+[submodule "wxIFM"]
+	path = wxIFM
+	url = git@github.com:smanders/wxIFM.git
+[submodule "wxplotctrl"]
+	path = wxplotctrl
+	url = git@github.com:smanders/wxplotctrl.git
+[submodule "wxthings"]
+	path = wxthings
+	url = git@github.com:smanders/wxthings.git
+[submodule "wxTLC"]
+	path = wxTLC
+	url = git@github.com:smanders/wxTLC
+[submodule "wxTMC"]
+	path = wxTMC
+	url = git@github.com:smanders/wxTMC
