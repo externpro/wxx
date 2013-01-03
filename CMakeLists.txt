@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8.5)
 project(wxx)
 include(flags OPTIONAL)
+set(CMAKE_DEBUG_POSTFIX)
+set(CMAKE_RELEASEMT_POSTFIX)
+set(CMAKE_RELEASE_POSTFIX)
 #######################################
-# cmake modules
 set(externpro ${CMAKE_INSTALL_PREFIX})
 if(UNIX)
   ###################
@@ -61,9 +63,6 @@ if(MSVC)
 endif()
 #######################################
 function(set_wxxtarget_properties target)
-  set(CMAKE_DEBUG_POSTFIX)
-  set(CMAKE_RELEASEMET_POSTFIX)
-  set(CMAKE_RELEASE_POSTFIX)
   if(MSVC)
     # toolset
     if(MSVC60)
