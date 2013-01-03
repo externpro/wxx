@@ -13,7 +13,6 @@ if(UNIX)
   endif()
   # NOTE: NUMBITS from flags.cmake
   find_program(wxWidgets_CONFIG_EXECUTABLE wx-config PATHS ${externpro}/bin${NUMBITS})
-  #find_program(wxWidgets_wxrc_EXECUTABLE wxrc PATHS ${externpro}/bin${NUMBITS})
   find_package(wxWidgets REQUIRED)
   include(${wxWidgets_USE_FILE})
   #set(wx_DEBUG TRUE)
@@ -52,11 +51,50 @@ if(UNIX)
   else()
     message(SEND_ERROR "GTK2 not found")
   endif()
-endif(UNIX)
+else()
+  set(wxbasename wxxmsw)
+  set(wxversion 28)
+endif()
 include_directories(${externpro}/include) # find wx headers
 if(MSVC)
   include_directories(${externpro}/include/wx/msvc) # find MSVC-specific wx/setup.h
 endif()
+#######################################
+function(set_wxxtarget_properties target)
+  set(CMAKE_DEBUG_POSTFIX)
+  set(CMAKE_RELEASEMET_POSTFIX)
+  set(CMAKE_RELEASE_POSTFIX)
+  if(MSVC)
+    # toolset
+    if(MSVC60)
+      set(toolset vc60)
+    elseif(MSVC70)
+      set(toolset vc70)
+    elseif(MSVC71)
+      set(toolset vc71)
+    elseif(MSVC80)
+      set(toolset vc80)
+    elseif(MSVC90)
+      set(toolset vc90)
+    elseif(MSVC10)
+      set(toolset vc100)
+    else()
+      set(toolset vcXX)
+    endif()
+    set_target_properties(${target} PROPERTIES
+      OUTPUT_NAME ${wxbasename}${wxversion}${toolset}x_${target}
+      DEBUG_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}d_${target}
+      RELEASEMT_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}s_${target}
+      RELEASE_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}_${target}
+      )
+  else()
+    set_target_properties(${target} PROPERTIES
+      OUTPUT_NAME ${wxbasename}x_${target}-${wxversion}
+      DEBUG_OUTPUT_NAME ${wxbasename}d_${target}-${wxversion}
+      RELEASE_OUTPUT_NAME ${wxbasename}_${target}-${wxversion}
+      )
+  endif()
+endfunction()
 #######################################
 set(wxx_libs
   wxIFM
