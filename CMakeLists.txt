@@ -40,11 +40,6 @@ if(UNIX)
     set(GTK2_ADDITIONAL_SUFFIXES x86_64-linux-gnu/glib-2.0)
   elseif(${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
     set(CMAKE_PREFIX_PATH /usr/local/lib/amd64 ${CMAKE_PREFIX_PATH})
-    #include_directories(
-    #  /usr/local/lib/amd64/glib-2.0/include
-    #  /usr/local/lib/amd64/gtk-2.0/include
-    #  /usr/local/lib/amd64/libffi-3.0.9/include
-    #  )
   endif()
   #set(GTK2_DEBUG TRUE)
   find_package(GTK2 2.6 REQUIRED gtk)
@@ -100,7 +95,7 @@ set(wxx_libs
   wxplotctrl/build
   wxthings/build
   wxTLC
-  #wxTMC/sdl
+  wxTMC/sdlcmake
 )
 foreach(lib ${wxx_libs})
   add_subdirectory(${lib})
