@@ -28,11 +28,11 @@ if(UNIX)
     message(STATUS "wxWidgets_CXX_FLAGS: ${wxWidgets_CXX_FLAGS}")
   endif()
   ###################
-  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --basename --debug=no
+  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${externpro} --basename --debug=no
     OUTPUT_VARIABLE wxbasename OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
     )
   string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
-  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --version
+  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${externpro} --version
     OUTPUT_VARIABLE wxversion OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
     )
   ###################
