@@ -9,9 +9,10 @@ set(externpro ${CMAKE_INSTALL_PREFIX})
 if(UNIX)
   ###################
   # wxWidgets
-  set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro})
   if(${CMAKE_BUILD_TYPE} MATCHES Debug)
     set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --debug=yes)
+  else()
+    set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --debug=no)
   endif()
   # NOTE: NUMBITS from flags.cmake
   find_program(wxWidgets_CONFIG_EXECUTABLE wx-config PATHS ${externpro}/bin${NUMBITS})
@@ -27,7 +28,7 @@ if(UNIX)
     message(STATUS "wxWidgets_CXX_FLAGS: ${wxWidgets_CXX_FLAGS}")
   endif()
   ###################
-  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --basename
+  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --basename --debug=no
     OUTPUT_VARIABLE wxbasename OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
     )
   string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
