@@ -6,13 +6,25 @@ set(CMAKE_RELEASEMT_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
 #######################################
 set(externpro ${CMAKE_INSTALL_PREFIX})
+if(DEFINED WX_SOURCE)
+  message(STATUS "WX_SOURCE: ${WX_SOURCE}")
+endif()
+if(DEFINED WX_INCLUDE)
+  string(REGEX REPLACE ".*include/wx-([0-9]*).([0-9]*)/wx$" "\\1.\\2" wxver ${WX_INCLUDE})
+  if(NOT UNIX)
+    string(REGEX REPLACE "([0-9])\\.([0-9])?" "\\1\\2" wxver ${wxver})
+  endif()
+  message(STATUS "wxver: ${wxver}")
+else()
+  message(SEND_ERROR "wxx CMakeLists.txt: WX_INCLUDE not defined")
+endif()
 if(UNIX)
   ###################
   # wxWidgets
   if(${CMAKE_BUILD_TYPE} MATCHES Debug)
-    set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --debug=yes)
+    set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --version=${wxver} --debug=yes)
   else()
-    set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --debug=no)
+    set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --version=${wxver} --debug=no)
   endif()
   # NOTE: NUMBITS from flags.cmake
   find_program(wxWidgets_CONFIG_EXECUTABLE wx-config PATHS ${externpro}/bin${NUMBITS})
@@ -28,13 +40,11 @@ if(UNIX)
     message(STATUS "wxWidgets_CXX_FLAGS: ${wxWidgets_CXX_FLAGS}")
   endif()
   ###################
-  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${externpro} --basename --debug=no
+  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${externpro}
+    --version=${wxver} --basename --debug=no
     OUTPUT_VARIABLE wxbasename OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
     )
   string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
-  execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${externpro} --version
-    OUTPUT_VARIABLE wxversion OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
-    )
   ###################
   # GTK2
   if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -53,7 +63,6 @@ if(UNIX)
   endif() # NOT Darwin
 else()
   set(wxbasename wxxmsw)
-  set(wxversion 28)
 endif()
 include_directories(${externpro}/include) # find wx headers
 if(MSVC)
@@ -82,16 +91,16 @@ function(set_wxxtarget_properties target)
       message(SEND_ERROR "wxx CMakeLists.txt: MSVC compiler support lacking")
     endif()
     set_target_properties(${target} PROPERTIES
-      OUTPUT_NAME ${wxbasename}${wxversion}${toolset}x_${target}
-      DEBUG_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}d_${target}
-      RELEASEMT_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}s_${target}
-      RELEASE_OUTPUT_NAME ${wxbasename}${wxversion}${toolset}_${target}
+      OUTPUT_NAME ${wxbasename}${wxver}${toolset}x_${target}
+      DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}d_${target}
+      RELEASEMT_OUTPUT_NAME ${wxbasename}${wxver}${toolset}s_${target}
+      RELEASE_OUTPUT_NAME ${wxbasename}${wxver}${toolset}_${target}
       )
   else()
     set_target_properties(${target} PROPERTIES
-      OUTPUT_NAME ${wxbasename}x_${target}-${wxversion}
-      DEBUG_OUTPUT_NAME ${wxbasename}d_${target}-${wxversion}
-      RELEASE_OUTPUT_NAME ${wxbasename}_${target}-${wxversion}
+      OUTPUT_NAME ${wxbasename}x_${target}-${wxver}
+      DEBUG_OUTPUT_NAME ${wxbasename}d_${target}-${wxver}
+      RELEASE_OUTPUT_NAME ${wxbasename}_${target}-${wxver}
       )
   endif()
 endfunction()
