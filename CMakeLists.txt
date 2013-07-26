@@ -10,7 +10,7 @@ if(DEFINED WX_SOURCE)
   message(STATUS "WX_SOURCE: ${WX_SOURCE}")
 endif()
 if(DEFINED WX_INCLUDE)
-  string(REGEX REPLACE ".*include/wx-([0-9]*).([0-9]*)/wx$" "\\1.\\2" wxver ${WX_INCLUDE})
+  string(REGEX REPLACE ".*include/wx-([0-9]*).([0-9]*)$" "\\1.\\2" wxver ${WX_INCLUDE})
   if(NOT UNIX)
     string(REGEX REPLACE "([0-9])\\.([0-9])?" "\\1\\2" wxver ${wxver})
   endif()
@@ -61,12 +61,10 @@ if(UNIX)
       message(SEND_ERROR "GTK2 not found")
     endif()
   endif() # NOT Darwin
-else()
+elseif(MSVC)
   set(wxbasename wxxmsw)
-endif()
-include_directories(${externpro}/include) # find wx headers
-if(MSVC)
-  include_directories(${externpro}/include/wx/msvc) # find MSVC-specific wx/setup.h
+  # find wx headers and custom wx/setup.h
+  include_directories(${WX_INCLUDE} ${WX_INCLUDE}/wx/msvc)
 endif()
 #######################################
 function(set_wxxtarget_properties target)
