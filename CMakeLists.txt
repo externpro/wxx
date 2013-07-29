@@ -61,6 +61,8 @@ if(UNIX)
     else()
       message(SEND_ERROR "GTK2 not found")
     endif()
+    # wxplotctrl plotdraw.cpp needs to include wx/gtk/dcclient.h
+    include_directories(${WX_SOURCE}/include)
   endif() # NOT Darwin
 elseif(MSVC)
   set(wxbasename wxxmsw)
