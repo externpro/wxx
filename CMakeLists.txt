@@ -110,11 +110,9 @@ function(set_wxxtarget_properties target)
 endfunction()
 #######################################
 set(wxx_libs
-  wxIFM
   wxplotctrl/build
   wxthings/build
   wxTLC
-  wxTMC/sdlcmake
 )
 foreach(lib ${wxx_libs})
   add_subdirectory(${lib})
