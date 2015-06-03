@@ -27,9 +27,8 @@ if(UNIX)
   else()
     set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --version=${wxver} --debug=no)
   endif()
-  # NOTE: NUMBITS from flags.cmake
   # NOTE: find_program wasn't always working, so changed to set
-  set(wxWidgets_CONFIG_EXECUTABLE ${externpro}/bin${NUMBITS}/wx-config)
+  set(wxWidgets_CONFIG_EXECUTABLE ${externpro}/bin/wx-config)
   find_package(wxWidgets REQUIRED)
   include(${wxWidgets_USE_FILE})
   #set(wx_DEBUG TRUE)
