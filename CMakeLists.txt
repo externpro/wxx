@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.10)
 project(wxx)
 include(flags OPTIONAL)
+# reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
-set(CMAKE_RELEASEMT_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
 #######################################
 set(externpro ${CMAKE_INSTALL_PREFIX})
@@ -91,11 +91,13 @@ function(set_wxxtarget_properties target)
       set(toolset vcXX)
       message(SEND_ERROR "wxx CMakeLists.txt: MSVC compiler support lacking")
     endif()
+    if(XP_BUILD_STATIC_RT) # from flags include, xpCommonFlags, xpopts.cmake
+      set(static s)
+    endif()
     set_target_properties(${target} PROPERTIES
       OUTPUT_NAME ${wxbasename}${wxver}${toolset}x_${target}
       DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}d_${target}
-      RELEASEMT_OUTPUT_NAME ${wxbasename}${wxver}${toolset}s_${target}
-      RELEASE_OUTPUT_NAME ${wxbasename}${wxver}${toolset}_${target}
+      RELEASE_OUTPUT_NAME ${wxbasename}${wxver}${toolset}${static}_${target}
       )
   else()
     set_target_properties(${target} PROPERTIES
