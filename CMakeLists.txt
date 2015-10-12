@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.10)
+cmake_minimum_required(VERSION 3.0)
 project(wxx)
 include(flags OPTIONAL)
 # reset any postfix setting done previously
@@ -96,7 +96,7 @@ function(set_wxxtarget_properties target)
     endif()
     set_target_properties(${target} PROPERTIES
       OUTPUT_NAME ${wxbasename}${wxver}${toolset}x_${target}
-      DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}d_${target}
+      DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}d${static}_${target}
       RELEASE_OUTPUT_NAME ${wxbasename}${wxver}${toolset}${static}_${target}
       )
   else()
