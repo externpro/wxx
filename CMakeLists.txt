@@ -95,8 +95,8 @@ function(set_wxxtarget_properties target)
       set(static s)
     endif()
     set_target_properties(${target} PROPERTIES
-      OUTPUT_NAME ${wxbasename}${wxver}${toolset}x_${target}
-      DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}d${static}_${target}
+      OUTPUT_NAME ${wxbasename}${wxver}${toolset}${static}x_${target}
+      DEBUG_OUTPUT_NAME ${wxbasename}${wxver}${toolset}${static}d_${target}
       RELEASE_OUTPUT_NAME ${wxbasename}${wxver}${toolset}${static}_${target}
       )
   else()
