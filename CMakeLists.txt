@@ -110,11 +110,15 @@ function(set_wxxtarget_properties target)
   endif()
 endfunction()
 #######################################
+# we want all platforms, at this point, to have
+# WX_VER of the form: 30, 31 (not 3.0, 3.1)
+# for the naming of the targets.cmake files
+string(REGEX REPLACE "([0-9])\\.([0-9])?" "\\1\\2" WX_VER ${wxver})
 set(wxx_libs
   wxplotctrl/build
   wxthings/build
   wxTLC
-)
+  )
 foreach(lib ${wxx_libs})
   add_subdirectory(${lib})
 endforeach()
