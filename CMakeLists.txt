@@ -47,19 +47,15 @@ if(UNIX)
     )
   string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
   ###################
-  # GTK2
+  # GTK
   if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-      set(GTK2_ADDITIONAL_SUFFIXES x86_64-linux-gnu/glib-2.0)
-    endif()
     find_package(PkgConfig)
-    pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
-    if(GTK2_FOUND)
-      include_directories(${GTK2_INCLUDE_DIRS})
-    else()
-      message(SEND_ERROR "GTK2 not found")
+    pkg_check_modules(GTK REQUIRED gtk+-2.0) # gtk+-3.0
+    if(GTK_FOUND)
+      include_directories(${GTK_INCLUDE_DIRS})
     endif()
     # wxplotctrl plotdraw.cpp needs to include wx/gtk/dcclient.h
+    # NOTE: it may only be gtk+-2.0 that needs this include path
     include_directories(${WX_SOURCE}/include)
   endif() # NOT Darwin
 elseif(MSVC)
