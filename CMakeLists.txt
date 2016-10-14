@@ -50,13 +50,17 @@ if(UNIX)
   # GTK
   if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     find_package(PkgConfig)
-    pkg_check_modules(GTK REQUIRED gtk+-2.0) # gtk+-3.0
+    if(NOT DEFINED GTK_VER)
+      message(FATAL_ERROR "GTK_VER should be defined (-DGTK_VER=2 or -DGTK_VER=3)")
+    endif()
+    pkg_check_modules(GTK REQUIRED gtk+-${GTK_VER}.0)
     if(GTK_FOUND)
       include_directories(${GTK_INCLUDE_DIRS})
     endif()
-    # wxplotctrl plotdraw.cpp needs to include wx/gtk/dcclient.h
-    # NOTE: it may only be gtk+-2.0 that needs this include path
-    include_directories(${WX_SOURCE}/include)
+    if(${GTK_VER} EQUAL 2)
+      # wxplotctrl plotdraw.cpp needs to include wx/gtk/dcclient.h when building against gtk2
+      include_directories(${WX_SOURCE}/include)
+    endif()
   endif() # NOT Darwin
 elseif(MSVC)
   set(wxbasename wxxmsw)
