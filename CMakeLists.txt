@@ -22,16 +22,14 @@ endif()
 if(UNIX)
   ###################
   # wxWidgets
+  set(wxWidgets_CONFIG_EXECUTABLE ${externpro}/bin/wx-config)
   if(${CMAKE_BUILD_TYPE} MATCHES Debug)
     set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --version=${wxver} --debug=yes)
   else()
     set(wxWidgets_CONFIG_OPTIONS --prefix=${externpro} --version=${wxver} --debug=no)
   endif()
-  # NOTE: find_program wasn't always working, so changed to set
-  set(wxWidgets_CONFIG_EXECUTABLE ${externpro}/bin/wx-config)
   find_package(wxWidgets REQUIRED)
   include(${wxWidgets_USE_FILE})
-  #set(wx_DEBUG TRUE)
   if(wx_DEBUG)
     message(STATUS "wxWidgets_USE_FILE: ${wxWidgets_USE_FILE}")
     message(STATUS "wxWidgets_INCLUDE_DIRS: ${wxWidgets_INCLUDE_DIRS}")
@@ -45,10 +43,7 @@ if(UNIX)
     --version=${wxver} --basename --debug=no
     OUTPUT_VARIABLE wxbasename OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
     )
-  string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
-  ###################
-  # GTK
-  if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  if(wxbasename MATCHES wx_gtk)
     find_package(PkgConfig)
     if(NOT DEFINED GTK_VER)
       message(FATAL_ERROR "GTK_VER should be defined (-DGTK_VER=2 or -DGTK_VER=3)")
@@ -61,7 +56,8 @@ if(UNIX)
       # wxplotctrl plotdraw.cpp needs to include wx/gtk/dcclient.h when building against gtk2
       include_directories(${WX_SOURCE}/include)
     endif()
-  endif() # NOT Darwin
+  endif()
+  string(REPLACE "wx_" "wxx_" wxbasename ${wxbasename})
 elseif(MSVC)
   set(wxbasename wxxmsw)
   # find wx headers and custom wx/setup.h
@@ -70,22 +66,10 @@ endif()
 #######################################
 function(set_wxxtarget_properties target)
   if(MSVC)
-    # toolset
-    if(MSVC_VERSION GREATER 1910 AND MSVC_VERSION LESS 1919) # VS 15.0 2017
-      set(toolset vc141)
-    elseif(MSVC_VERSION EQUAL 1900) # VS 14.0 2015
-      set(toolset vc140)
-    elseif(MSVC_VERSION EQUAL 1800) # VS 12.0 2013
-      set(toolset vc120)
-    elseif(MSVC_VERSION EQUAL 1700) # VS 11.0 2012
-      set(toolset vc110)
-    elseif(MSVC_VERSION EQUAL 1600) # VS 10.0 2010
-      set(toolset vc100)
-    elseif(MSVC_VERSION EQUAL 1500) # VS 9.0 2008
-      set(toolset vc90)
+    if(COMMAND xpGetCompilerPrefix)
+      xpGetCompilerPrefix(toolset)
     else()
-      set(toolset vcXX)
-      message(SEND_ERROR "wxx CMakeLists.txt: MSVC compiler support lacking")
+      set(toolset vc)
     endif()
     if(XP_BUILD_STATIC_RT) # from flags include, xpCommonFlags, xpopts.cmake
       set(static s)
