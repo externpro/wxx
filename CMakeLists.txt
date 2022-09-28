@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 3.12)
 project(wxx)
+include(GNUInstallDirs)
 include(flags OPTIONAL)
 # reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
 #######################################
 find_package(usexp-wxwidgets REQUIRED PATHS ${CMAKE_MODULE_PATH} NO_DEFAULT_PATH)
-get_target_property(wxIncDirs wx::base INTERFACE_INCLUDE_DIRECTORIES)
-list(FILTER wxIncDirs INCLUDE REGEX "include/wx-")
-list(GET wxIncDirs 0 wxIncDir)
-string(REGEX REPLACE ".*include/wx-([0-9]*).([0-9]*)$" "\\1.\\2" wxVer ${wxIncDir})
-set(wxInc "include/wx-${wxVer}") # wxInc used in subdirectories
-message(STATUS "wxVer: ${wxVer}, wxInc: ${wxInc}")
+string(REGEX REPLACE "include/wx-([0-9]*).([0-9]*)$" "\\1.\\2" wxVer ${CMAKE_INSTALL_INCLUDEDIR})
+if(wxVer STREQUAL CMAKE_INSTALL_INCLUDEDIR)
+  # default CMAKE_INSTALL_INCLUDEDIR, not passed in, or doesn't include wx-X.X
+  get_target_property(wxIncDirs wx::base INTERFACE_INCLUDE_DIRECTORIES)
+  list(FILTER wxIncDirs INCLUDE REGEX "include/wx-")
+  list(GET wxIncDirs 0 wxIncDir)
+  string(REGEX REPLACE ".*include/wx-([0-9]*).([0-9]*)$" "\\1.\\2" wxVer ${wxIncDir})
+endif()
 if(MSVC)
   string(REGEX REPLACE "([0-9])\\.([0-9])?" "\\1\\2" wxVer ${wxVer})
   if(COMMAND xpGetCompilerPrefix)
@@ -43,11 +46,7 @@ else()
     )
 endif()
 #######################################
-# we want all platforms, at this point, to have
-# WX_VER of the form: 30, 31 (not 3.0, 3.1)
-# for the naming of the targets.cmake files
-string(REGEX REPLACE "([0-9])\\.([0-9])?" "\\1\\2" WX_VER ${wxVer})
-set(targetsFile ${PROJECT_NAME}${WX_VER}-targets)
+set(targetsFile ${PROJECT_NAME}-targets)
 foreach(lib
   wxthings/build
   wxplotctrl/build
@@ -55,3 +54,10 @@ foreach(lib
   )
   add_subdirectory(${lib})
 endforeach()
+if(DEFINED XP_NAMESPACE)
+  set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
+endif()
+if(NOT DEFINED XP_INSTALL_CMAKEDIR)
+  set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+endif()
+install(EXPORT ${targetsFile} DESTINATION ${XP_INSTALL_CMAKEDIR} ${nameSpace})
