@@ -6,7 +6,7 @@ include(flags OPTIONAL)
 set(CMAKE_DEBUG_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
 #######################################
-find_package(usexp-wxwidgets REQUIRED PATHS ${CMAKE_MODULE_PATH} NO_DEFAULT_PATH)
+xpFindPkg(PKGS wxwidgets)
 string(REGEX REPLACE "include/wx-([0-9]*).([0-9]*)$" "\\1.\\2" wxVer ${CMAKE_INSTALL_INCLUDEDIR})
 if(wxVer STREQUAL CMAKE_INSTALL_INCLUDEDIR)
   # default CMAKE_INSTALL_INCLUDEDIR, not passed in, or doesn't include wx-X.X
@@ -29,7 +29,7 @@ if(MSVC)
     DEBUG_OUTPUT_NAME wxxmsw${wxVer}${toolset}${static}d_@TARGET@
     RELEASE_OUTPUT_NAME wxxmsw${wxVer}${toolset}${static}_@TARGET@
     )
-elseif(UNIX AND DEFINED wxWidgets_CONFIG_EXECUTABLE) # wxWidgets_CONFIG_EXECUTABLE from usexp-wxwidgets
+elseif(UNIX AND DEFINED wxWidgets_CONFIG_EXECUTABLE) # wxWidgets_CONFIG_EXECUTABLE from wxwidgets-targets
   execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --prefix=${CMAKE_INSTALL_PREFIX}
     --version=${wxVer} --basename --debug=no
     OUTPUT_VARIABLE wxbasename OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
