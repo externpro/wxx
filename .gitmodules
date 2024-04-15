@@ -7,3 +7,6 @@
 [submodule "wxTLC"]
 	path = wxTLC
 	url = https://github.com/externpro/wxTLC
+[submodule ".devcontainer"]
+	path = .devcontainer
+	url = https://github.com/externpro/externpro
