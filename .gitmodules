@@ -1,9 +1,9 @@
 [submodule "wxplotctrl"]
 	path = wxplotctrl
-	url = https://github.com/externpro/wxplotctrl.git
+	url = https://github.com/externpro/wxplotctrl
 [submodule "wxthings"]
 	path = wxthings
-	url = https://github.com/externpro/wxthings.git
+	url = https://github.com/externpro/wxthings
 [submodule "wxTLC"]
 	path = wxTLC
 	url = https://github.com/externpro/wxTLC
