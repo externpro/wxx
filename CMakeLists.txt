@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.31)
 project(wxx)
 include(GNUInstallDirs)
-include(flags OPTIONAL)
+include(xpflags)
 # reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
@@ -22,7 +22,7 @@ if(MSVC)
   else()
     set(toolset vc)
   endif()
-  if(XP_BUILD_STATIC_RT) # from flags include, xpCommonFlags, xpopts.cmake
+  if(XP_BUILD_STATIC_RT) # from xpflags include, xpCommonFlags, xpopts.cmake
     set(static s)
   endif()
   set(WXX_OUTPUT_NAME wxxmsw${wxVer}${toolset}${static}y_@TARGET@
