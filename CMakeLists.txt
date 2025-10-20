@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.31)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/.devcontainer/cmake)
 include(preproject)
 project(wxx VERSION 24.00)
@@ -6,8 +6,8 @@ set(buildpro_REV 24.05)
 include(xpfunmac)
 set(externpro_REV 24.03)
 find_package(externpro REQUIRED)
-include(flags)
 include(GNUInstallDirs)
+include(xpflags)
 # reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
@@ -24,7 +24,7 @@ if(MSVC)
   else()
     set(toolset vc)
   endif()
-  if(XP_BUILD_STATIC_RT) # from flags include, xpCommonFlags, xpopts.cmake
+  if(XP_BUILD_STATIC_RT) # from xpflags include, xpCommonFlags, xpopts.cmake
     set(static s)
   endif()
   set(WXX_OUTPUT_NAME wxxmsw${wxVer}${toolset}${static}y_@TARGET@
