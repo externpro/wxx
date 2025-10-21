@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/.devcontainer/cmake)
-include(preproject)
-project(wxx VERSION 24.00)
-set(buildpro_REV 24.05)
-include(xpfunmac)
-set(externpro_REV 24.03)
-find_package(externpro REQUIRED)
+set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES .devcontainer/cmake/xproinc.cmake)
+project(wxx)
 include(GNUInstallDirs)
 include(xpflags)
 # reset any postfix setting done previously
