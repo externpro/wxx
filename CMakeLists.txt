@@ -41,16 +41,19 @@ else()
     )
 endif()
 #######################################
-if(NOT DEFINED XP_INSTALL_CMAKEDIR)
+set(targetsFile ${PROJECT_NAME}-targets)
+if(DEFINED XP_NAMESPACE)
+  xpExternPackage(NAMESPACE ${XP_NAMESPACE}
+    TARGETS_FILE ${targetsFile} LIBRARIES plotctrl things tlc
+    BASE v0 XPDIFF "intro" DEPS wxwidgets
+    WEB "https://github.com/externpro/wxx"
+    DESC "wxWidget-based extra components"
+    LICENSE "[wxWindows](http://wxcode.sourceforge.net/ 'wxWindows Library License')"
+    )
+  set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
+elseif(NOT DEFINED XP_INSTALL_CMAKEDIR)
   set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
 endif()
-set(wxxlib plotctrl things tlc)
-if(DEFINED XP_NAMESPACE)
-  set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
-  list(TRANSFORM wxxlib PREPEND ${XP_NAMESPACE}::)
-endif()
-set(targetsFile ${PROJECT_NAME}-targets)
-xpPackageDevel(TARGETS_FILE ${targetsFile} DEPS wxwidgets LIBRARIES ${wxxlib})
 foreach(lib
   wxthings/build
   wxplotctrl/build
