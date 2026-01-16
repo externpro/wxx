@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES .devcontainer/cmake/xproinc.cmake)
 project(wxx)
-include(GNUInstallDirs)
-include(xpflags)
 # reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
 set(CMAKE_RELEASE_POSTFIX)
