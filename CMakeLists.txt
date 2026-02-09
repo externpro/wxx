@@ -51,8 +51,8 @@ if(DEFINED XP_NAMESPACE)
     LICENSE "[wxWindows](http://wxcode.sourceforge.net/ 'wxWindows Library License')"
     )
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
-elseif(NOT DEFINED XP_INSTALL_CMAKEDIR)
-  set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+elseif(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
+  set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
 endif()
 foreach(lib
   wxthings/build
@@ -61,4 +61,4 @@ foreach(lib
   )
   add_subdirectory(${lib})
 endforeach()
-install(EXPORT ${targetsFile} DESTINATION ${XP_INSTALL_CMAKEDIR} ${nameSpace})
+install(EXPORT ${targetsFile} DESTINATION ${CMAKE_INSTALL_CMAKEDIR} ${nameSpace})
