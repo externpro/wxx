@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
-set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES .devcontainer/cmake/xproinc.cmake)
+cmake_minimum_required(VERSION 4.3)
 project(wxx)
 # reset any postfix setting done previously
 set(CMAKE_DEBUG_POSTFIX)
@@ -42,18 +41,6 @@ else()
 endif()
 #######################################
 set(targetsFile ${PROJECT_NAME}-targets)
-if(DEFINED XP_NAMESPACE)
-  xpExternPackage(NAMESPACE ${XP_NAMESPACE}
-    TARGETS_FILE ${targetsFile} LIBRARIES plotctrl things tlc
-    BASE v0 XPDIFF "intro" DEPS wxwidgets
-    WEB "https://github.com/externpro/wxx"
-    DESC "wxWidget-based extra components"
-    LICENSE "[wxWindows](http://wxcode.sourceforge.net/ 'wxWindows Library License')"
-    )
-  set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
-elseif(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
-  set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
-endif()
 foreach(lib
   wxthings/build
   wxplotctrl/build
@@ -61,4 +48,15 @@ foreach(lib
   )
   add_subdirectory(${lib})
 endforeach()
-install(EXPORT ${targetsFile} DESTINATION ${CMAKE_INSTALL_CMAKEDIR} ${nameSpace})
+if(COMMAND xpExternPackage)
+  xpExternPackage(TARGETS_FILE ${targetsFile}
+    LIBRARIES plotctrl things tlc
+    BASE v0 XPDIFF "intro"
+    WEB "https://github.com/externpro/wxx"
+    DESC "wxWidget-based extra components"
+    LICENSE "[wxWindows](http://wxcode.sourceforge.net/ 'wxWindows Library License')"
+    )
+elseif(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
+  set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+endif()
+install(EXPORT ${targetsFile} DESTINATION ${CMAKE_INSTALL_CMAKEDIR} NAMESPACE ${PROJECT_NAME}::)
